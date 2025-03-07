@@ -62,3 +62,38 @@ header {
   cursor: pointer;
   border-radius: 5px;
 }
+
+
+.cart-icon {
+  position: relative;
+  cursor: pointer;
+}
+
+.cart-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: rgb(240, 240, 240);
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 250px;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.cart-item button {
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.totalValor {
+  color: black;
+}
