@@ -1,36 +1,24 @@
 import React from "react";
-import { View, Text, TextInput, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
-import { useSearch } from "../context/SearchContext";
+import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from "react-native";
+import Header from "../components/Header";
 import { useCart } from "../context/CartContext";
 
 const books = [
   { id: 1, title: "Café com Deus Pai", price: 74.97, image: require("../../assets/book1.jpg") },
-  { id: 2, title: "Dias Quentes", price: 27.93, image: require("../../assets/book1.jpg") },
-  { id: 3, title: "Nunca Minta", price: 44.92, image: require("../../assets/book1.jpg") },
+  { id: 2, title: "Dias Quentes", price: 27.93, image: require("../../assets/book2.jpg") },
+  { id: 3, title: "Nunca Minta", price: 44.92, image: require("../../assets/book2.jpg") },
   { id: 4, title: "A Cabeça do Santo", price: 52.42, image: require("../../assets/book1.jpg") },
 ];
 
 const HomeScreen = () => {
-  const { searchTerm, setSearchTerm } = useSearch();
   const { addToCart } = useCart();
-
-  const filteredBooks = books.filter((book) =>
-    book.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <View style={styles.container}>
+      <Header />
       <Text style={styles.logo}>A PÁGINA</Text>
-
-      <TextInput
-        style={styles.searchBar}
-        placeholder="O que você procura?"
-        value={searchTerm}
-        onChangeText={setSearchTerm}
-      />
-
       <FlatList
-        data={filteredBooks}
+        data={books}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={styles.bookCard}>
@@ -48,15 +36,14 @@ const HomeScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  logo: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 10 },
-  searchBar: { borderWidth: 1, borderColor: "#ccc", padding: 10, borderRadius: 5, marginBottom: 20 },
-  bookCard: { padding: 10, backgroundColor: "#f9f9f9", marginBottom: 10, borderRadius: 5 },
-  image: { width: 100, height: 150, resizeMode: "cover", alignSelf: "center" },
-  title: { fontSize: 16, fontWeight: "bold", textAlign: "center", marginVertical: 5 },
-  price: { fontSize: 14, textAlign: "center", color: "green", marginBottom: 5 },
-  button: { backgroundColor: "blue", padding: 10, borderRadius: 5, alignSelf: "center" },
-  buttonText: { color: "#fff", textAlign: "center" },
+  container: { flex: 1, backgroundColor: "#fff", padding: 10 },
+  logo: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginVertical: 10 },
+  bookCard: { padding: 15, backgroundColor: "#f9f9f9", marginBottom: 10, borderRadius: 10, alignItems: "center" },
+  image: { width: 120, height: 180, resizeMode: "cover" },
+  title: { fontSize: 18, fontWeight: "bold", marginVertical: 5 },
+  price: { fontSize: 16, color: "green", marginBottom: 10 },
+  button: { backgroundColor: "blue", padding: 10, borderRadius: 5 },
+  buttonText: { color: "#fff" },
 });
 
 export default HomeScreen;
