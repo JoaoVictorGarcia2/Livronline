@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Header from "./components/Header";
 import HeaderLogin from "./components/HeaderLogin";
+import BookDetailPage from "./pages/BookDetailPage";
 
 const AppContent = () => {
   const location = useLocation();
@@ -16,6 +17,7 @@ const AppContent = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/books/:bookId" element={<BookDetailPage />} />
       </Routes>
     </div>
   );

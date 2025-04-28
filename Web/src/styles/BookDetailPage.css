@@ -1,0 +1,230 @@
+/* src/styles/BookDetailPage.css */
+
+.book-detail-page {
+    padding: 20px;
+    max-width: 1100px;
+    margin: 20px auto;
+    background-color: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 4px;
+  }
+  
+  .book-detail-status {
+    text-align: center;
+    padding: 50px 20px;
+    font-size: 1.2em;
+    color: #555;
+  }
+  .book-detail-status a {
+      color: #007bff;
+      text-decoration: underline;
+      margin-top: 15px;
+      display: inline-block;
+  }
+  
+  .book-main-info {
+    display: flex;
+    gap: 40px; /* Mais espaço */
+    margin-bottom: 35px;
+    flex-wrap: wrap;
+  }
+  
+  /* Container da imagem principal - AUMENTADO */
+  .book-image-container {
+    flex: 0 0 350px; /* Aumenta a largura base da imagem principal */
+    max-width: 350px; /* Garante que não exceda */
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    align-self: flex-start;
+  }
+  .book-image-container img:hover {
+    transform: scale(1.23);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+  }
+  
+  .book-image-container img {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    display: block;
+    margin: 0 auto;
+    border-radius: 3px;
+  }
+  
+  .book-image-container .placeholder-image {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    max-width: 350px; /* Ajusta placeholder */
+    height: auto;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #aaa;
+    font-style: italic;
+    border: 1px solid #ddd;
+    cursor: default;
+    border-radius: 3px;
+  }
+  
+  .book-summary-info {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .book-summary-info h1 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    font-size: 2em;
+    line-height: 1.2;
+  }
+  
+  .book-summary-info .authors {
+    font-style: italic;
+    color: #555;
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+  }
+  
+  .book-rating {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .stars { color: #f8bf02; letter-spacing: 1px; }
+  .score-number { color: #555; font-size: 0.9em; }
+  
+  .book-price {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #B12704;
+    margin-bottom: 25px;
+  }
+  
+  .buy-button {
+    background-color: #f0c14b;
+    border: 1px solid;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease;
+  }
+  .buy-button:hover { background-color: #ddb347; }
+  .buy-button:disabled { background-color: #e0e0e0; border-color: #c0c0c0; color: #888; cursor: not-allowed; }
+  
+  .categories, .book-summary-info p {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 0.95em;
+    line-height: 1.4;
+  }
+  .book-summary-info p strong {
+      font-weight: 600;
+      margin-right: 5px;
+  }
+  
+  .book-links { margin-top: 20px; }
+  .book-links a { margin-right: 20px; color: #007bff; text-decoration: none; font-size: 0.9em; }
+  .book-links a:hover { text-decoration: underline; }
+  
+  .book-description { margin-top: 40px; border-top: 1px solid #e0e0e0; padding-top: 25px; }
+  .book-description h2 { margin-bottom: 15px; font-size: 1.4em;}
+  .book-description p { line-height: 1.7; color: #333; }
+  
+  .book-reviews-section { margin-top: 40px; border-top: 1px solid #e0e0e0; padding-top: 25px; }
+  .book-reviews-section h2 { margin-bottom: 25px; font-size: 1.4em; }
+  
+  .reviews-list { list-style: none; padding: 0; }
+  .review-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+  .review-item:last-child { border-bottom: none; }
+  
+  .review-header { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; flex-wrap: wrap; }
+  .review-header strong { font-size: 1.1em; color: #222; }
+  .review-rating { margin-left: auto; }
+  .review-date { color: #777; font-size: 0.9em; }
+  
+  .review-summary { margin-top: 8px; margin-bottom: 8px; }
+  .review-summary strong { font-weight: 600; }
+  .review-text { line-height: 1.6; color: #444; margin-bottom: 8px; }
+  .review-item small { color: #888; font-size: 0.85em; }
+  
+  
+  /* --- Estilos do Modal da Imagem (ATUALIZADOS) --- */
+  .image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.9); /* Um pouco mais escuro */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    padding: 5px; /* Padding mínimo para ver o 'x' */
+    cursor: pointer;
+    overflow: hidden; /* Evita scroll na overlay */
+  }
+  
+  .image-modal-content {
+    position: relative;
+    background-color: transparent;
+    width: auto; /* Permite que a imagem defina a largura */
+    height: auto; /* Permite que a imagem defina a altura */
+    max-width: none; /* Remove restrição do container */
+    max-height: none;/* Remove restrição do container */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: default;
+  }
+  
+  /* Imagem dentro do modal - AUMENTADA */
+  .image-modal-content img {
+    display: block;
+    /* Deixa a imagem quase ocupar a tela, mas com pequena margem */
+    max-width: 96vw; /* Quase toda largura */
+    max-height: 96vh;/* Quase toda altura */
+    object-fit: contain;
+    border-radius: 3px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+  }
+  
+  /* Botão de fechar - NOVO ESTILO */
+  .image-modal-close-btn {
+    position: absolute;
+    top: 8px;  /* Posição ajustada */
+    right: 15px; /* Posição ajustada */
+    background-color: transparent; /* Sem fundo */
+    border: none; /* Sem borda */
+    color: red; /* Cor vermelha */
+    font-family: 'Arial', sans-serif; /* Fonte limpa */
+    font-size: 3rem; /* Tamanho grande para o 'x' */
+    font-weight: bold;
+    line-height: 1; /* Ajuste fino vertical */
+    padding: 0;
+    cursor: pointer;
+    z-index: 1051;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5); /* Sombra leve para destacar */
+    transition: color 0.2s ease;
+  }
+  .image-modal-close-btn:hover {
+    color: darkred; /* Escurece no hover */
+  }
+  
+  /* Loading sutil */
+  .loading-indicator {
+     text-align: center;
+     padding: 10px;
+     font-style: italic;
+     color: #888;
+  }

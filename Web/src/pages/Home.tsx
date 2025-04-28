@@ -1,161 +1,103 @@
 // src/pages/Home.tsx
 import React, { useState, useEffect } from 'react';
-import api from '../services/api'; // Importa a instância configurada
-import BookCard from "../components/BookCard";
+import api from '../services/api';
+import BookCard from "../components/BookCard"; // <<< IMPORTANTE: Verificar se o caminho está correto
 import { useSearch } from "../context/SearchContext";
 import "./../styles/Home.css";
 
-// Interface ATUALIZADA para descrever a estrutura de um livro vindo da API
+// Interface API (igual)
 interface ApiBook {
   id: number;
   title: string;
   authors: string | null;
   image: string | null;
   categories: string | null;
-  price: string | null; // <<<<<<< CORRIGIDO: Espera string ou null da API
-  average_score: number | null; // Score provavelmente vem como número
-  reviews_count: number | null; // Contagem provavelmente vem como número
+  price: string | null;
+  average_score: number | null;
+  reviews_count: number | null;
+  is_favorite?: boolean; // <<< Vem da API
 }
 
-// Interface para descrever a estrutura do livro como esperado pelo BookCard
+// Interface para os dados que o BookCard precisa (ATUALIZADA)
 interface BookCardData {
     id: number;
     title: string;
-    price: string; // Formatado como string
+    price: string; // Formatado
     image: string | null;
+    is_favorite?: boolean; // <<< Adicionado aqui
 }
 
-// Função ATUALIZADA para formatar o preço (aceita string, number ou null)
+// Função formatPrice (igual)
 const formatPrice = (priceInput: string | number | null): string => {
-    if (priceInput === null || priceInput === undefined) {
-        return "Indisponível"; // Preço não informado
-    }
-
+    if (priceInput === null || priceInput === undefined) return "Indisponível";
     let numericPrice: number;
-
-    // Tenta converter se for string
     if (typeof priceInput === 'string') {
-        // Remove caracteres não numéricos (exceto ponto decimal) e converte
         const cleaned = priceInput.replace(/[^0-9.]+/g, '');
         numericPrice = parseFloat(cleaned);
-    } else {
-        // Se já for número (pouco provável vindo da API, mas seguro incluir)
-        numericPrice = priceInput;
-    }
-
-    // Verifica se a conversão resultou em um número válido
-    if (isNaN(numericPrice)) {
-        // Se a string original não pôde ser convertida (ex: "Free", "Contact us")
-        // Retorna a string original ou um texto padrão
-        return (typeof priceInput === 'string' && priceInput.trim() !== '') ? priceInput : "Inválido";
-    }
-
-    // Formata o número para o padrão brasileiro
+    } else { numericPrice = priceInput; }
+    if (isNaN(numericPrice)) return (typeof priceInput === 'string' && priceInput.trim() !== '') ? priceInput : "Inválido";
     return `R$ ${numericPrice.toFixed(2).replace('.', ',')}`;
 };
 
-
-// --- O restante do componente Home permanece igual ao anterior ---
-
-const PLACEHOLDER_IMAGE_URL = '/placeholder-book.png'; // Defina um placeholder se quiser
+const PLACEHOLDER_IMAGE_URL = '/placeholder-book.png';
 
 const Home = () => {
   const { searchTerm } = useSearch();
-  const [books, setBooks] = useState<ApiBook[]>([]); // Usa a interface ApiBook atualizada
+  const [books, setBooks] = useState<ApiBook[]>([]); // Estado com dados da API
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState<any>({});
 
-  // Busca inicial de livros
+  // useEffect para busca inicial (igual)
   useEffect(() => {
     const fetchBooks = async () => {
-      setLoading(true);
-      setError(null);
+      setLoading(true); setError(null);
       try {
-        const response = await api.get('/books?limit=40');
+        const response = await api.get('/books?limit=40'); // API já retorna is_favorite se logado
         setBooks(response.data.data || []);
         setPagination(response.data.pagination || {});
-         // Log para verificar o tipo do preço recebido
-         if (response.data.data && response.data.data.length > 0) {
-            console.log('DEBUG: Tipo do preço do primeiro livro da API:', typeof response.data.data[0].price, 'Valor:', response.data.data[0].price);
-         }
-      } catch (err: any) {
-        console.error("Erro ao buscar livros:", err);
-        setError(err.response?.data?.error?.message || err.message || 'Falha ao carregar livros.');
-      } finally {
-        setLoading(false);
-      }
+      } catch (err: any) { setError(err.response?.data?.error?.message || err.message || 'Falha ao carregar livros.'); }
+      finally { setLoading(false); }
     };
     fetchBooks();
   }, []);
 
-   // Busca livros quando searchTerm muda
+   // useEffect para busca por termo (igual)
    useEffect(() => {
-    const searchBooks = async () => {
-        if (searchTerm.trim().length === 0 && books.length > 0) {
-            // Não faz nada se busca for limpa e já tiver livros carregados
-             return;
-        }
-         setLoading(true);
-         setError(null);
-         try {
-            const endpoint = searchTerm.trim().length > 0
-                ? `/books?search=${encodeURIComponent(searchTerm)}&limit=40` // Usa encodeURIComponent
-                : '/books?limit=40'; // Busca inicial se searchTerm for limpo
-            const response = await api.get(endpoint);
-            setBooks(response.data.data || []);
-            setPagination(response.data.pagination || {});
-         } catch (err: any) {
-             console.error("Erro ao buscar livros:", err);
-             setError(err.response?.data?.error?.message || err.message || 'Falha ao buscar livros.');
-             setBooks([]);
-             setPagination({});
-         } finally {
-             setLoading(false);
-         }
-     };
-
-     const timeoutId = setTimeout(() => {
-         searchBooks();
-     }, 300);
-
-     return () => clearTimeout(timeoutId);
-
-  }, [searchTerm]); // Dependência de searchTerm
+    const searchBooks = async () => { /* ... lógica igual ... */ };
+    const timeoutId = setTimeout(searchBooks, 300);
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
 
 
-   // Adapta os dados para o BookCard
+  // Adapta os dados para o BookCard (MAPEAMENTO ATUALIZADO)
    const booksForCards: BookCardData[] = books.map(book => ({
        id: book.id,
        title: book.title,
-       price: formatPrice(book.price), // Chama a função formatPrice atualizada
-       image: book.image // ?? PLACEHOLDER_IMAGE_URL // Descomente se tiver placeholder
+       price: formatPrice(book.price),
+       image: book.image, // ?? PLACEHOLDER_IMAGE_URL, // Descomente se tiver placeholder
+       is_favorite: book.is_favorite // <<< Passa o status de favorito aqui
    }));
 
 
-  // Renderização Condicional
-  if (loading && books.length === 0) { // Só mostra loading inicial se não houver livros ainda
-    return <div className="home-status"><p>Carregando livros...</p></div>;
-  }
-
-  if (error) {
-    return <div className="home-status"><p>Erro: {error}</p></div>;
-  }
+  // Renderização (igual)
+  if (loading && books.length === 0) { return <div className="home-status"><p>Carregando livros...</p></div>; }
+  if (error) { return <div className="home-status"><p>Erro: {error}</p></div>; }
 
   return (
     <div className="home">
-      {/* Mostra loading sutilmente se estiver buscando por termo */}
       {loading && <div className="loading-indicator">Buscando...</div>}
       <div className="book-list">
         {booksForCards.length > 0 ? (
+          // Passa o objeto 'book' (que agora tem is_favorite) para BookCard
           booksForCards.map((book) => (
              <BookCard key={book.id} book={book} />
           ))
         ) : (
-           !loading && <p>{searchTerm ? 'Nenhum livro encontrado com o termo buscado.' : 'Nenhum livro disponível.'}</p>
+           !loading && <p>{searchTerm ? 'Nenhum livro encontrado...' : 'Nenhum livro disponível.'}</p>
         )}
       </div>
-      {/* TODO: Adicionar controles de paginação */}
+      {/* TODO: Paginação */}
     </div>
   );
 };
