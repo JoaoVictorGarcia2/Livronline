@@ -5,6 +5,8 @@ import Register from "./pages/Register";
 import Header from "./components/Header";
 import HeaderLogin from "./components/HeaderLogin";
 import BookDetailPage from "./pages/BookDetailPage";
+import FavoritesPage from "./pages/FavoritesPage"; 
+import CartPage from "./pages/CartPage";
 
 const AppContent = () => {
   const location = useLocation();
@@ -18,6 +20,8 @@ const AppContent = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/books/:bookId" element={<BookDetailPage />} />
+        <Route path="/favorites" element={<FavoritesPage />} /> 
+        <Route path="/cart" element={<CartPage />} /> 
       </Routes>
     </div>
   );

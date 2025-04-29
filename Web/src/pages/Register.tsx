@@ -2,227 +2,215 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import api from "../services/api"; // Importa nossa instância axios
+import api from "../services/api";
+import './../styles/RegisterPage.css'; // <<< Importa o novo CSS
 
-// Interfaces para os dados que vêm da API
-interface Genre {
-    id: number;
-    name: string;
-}
-
-interface BookSearchResult {
-    id: number;
-    title: string;
-    authors: string | null;
-}
+// Interfaces (iguais)
+interface Genre { id: number; name: string; }
+interface BookSearchResult { id: number; title: string; authors: string | null; }
 
 function Register() {
+    // Estados do formulário
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [apiErrors, setApiErrors] = useState<any[]>([]); // Erros vindos da API
+    const [apiErrors, setApiErrors] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
 
-    // Estados para seleção de favoritos
-    const [genres, setGenres] = useState<Genre[]>([]);
-    const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+    // Estados para livros favoritos
     const [bookSearchTerm, setBookSearchTerm] = useState("");
     const [bookSearchResults, setBookSearchResults] = useState<BookSearchResult[]>([]);
-    const [selectedBooks, setSelectedBooks] = useState<BookSearchResult[]>([]); // Guarda os objetos dos livros selecionados
+    const [selectedBooks, setSelectedBooks] = useState<BookSearchResult[]>([]);
     const [isSearchingBooks, setIsSearchingBooks] = useState<boolean>(false);
 
-    const { register } = useAuth(); // Pega a função register do context
+    // Estados para gêneros favoritos
+    const [genres, setGenres] = useState<Genre[]>([]);
+    const [genreSearchTerm, setGenreSearchTerm] = useState(""); // <<< NOVO estado para busca de gênero
+    const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
+
+    const { register } = useAuth();
     const navigate = useNavigate();
 
-    // Busca gêneros na montagem do componente
+    // Busca gêneros na montagem (igual)
     useEffect(() => {
         const fetchGenres = async () => {
             try {
-                const response = await api.get('/genres');
+                const response = await api.get<Genre[]>('/genres'); // Espera array de Genre
                 setGenres(response.data || []);
-            } catch (error) {
-                console.error("Erro ao buscar gêneros:", error);
-                // Poderia definir um erro aqui para exibir na UI
-            }
+            } catch (error) { console.error("Erro ao buscar gêneros:", error); }
         };
         fetchGenres();
     }, []);
 
-    // Busca livros quando o termo de busca muda (com debounce simples)
+    // Busca livros (igual)
     useEffect(() => {
-        // Evita busca vazia
-        if (bookSearchTerm.trim().length < 2) { // Só busca com pelo menos 2 caracteres
-             setBookSearchResults([]);
-             setIsSearchingBooks(false);
-             return;
-        }
-
+        if (bookSearchTerm.trim().length < 2) { setBookSearchResults([]); setIsSearchingBooks(false); return; }
         setIsSearchingBooks(true);
         const delayDebounceFn = setTimeout(async () => {
             try {
-                const response = await api.get(`/books?search=${bookSearchTerm}&limit=10`); // Limita resultados
+                const response = await api.get(`/books?search=${encodeURIComponent(bookSearchTerm)}&limit=10`);
                 setBookSearchResults(response.data.data || []);
-            } catch (error) {
-                console.error("Erro ao buscar livros:", error);
-                setBookSearchResults([]); // Limpa resultados em caso de erro
-            } finally {
-                 setIsSearchingBooks(false);
-            }
-        }, 500); // Espera 500ms após parar de digitar
-
-        return () => clearTimeout(delayDebounceFn); // Limpa o timeout se o termo mudar antes
+            } catch (error) { console.error("Erro ao buscar livros:", error); setBookSearchResults([]); }
+            finally { setIsSearchingBooks(false); }
+        }, 500);
+        return () => clearTimeout(delayDebounceFn);
     }, [bookSearchTerm]);
 
+    // Handlers de seleção/remoção de livro (iguais)
+    const handleBookSelect = (book: BookSearchResult) => {
+        if (selectedBooks.length < 2 && !selectedBooks.find(b => b.id === book.id)) { setSelectedBooks(prev => [...prev, book]); }
+        setBookSearchTerm(""); setBookSearchResults([]);
+    };
+    const handleBookRemove = (bookId: number) => { setSelectedBooks(prev => prev.filter(b => b.id !== bookId)); };
 
-    // Manipulador para seleção de gênero (checkbox)
+    // Handler de seleção de gênero (igual)
     const handleGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const genreId = parseInt(event.target.value, 10);
-        if (event.target.checked) {
-            setSelectedGenreIds((prev) => [...prev, genreId]);
-        } else {
-            setSelectedGenreIds((prev) => prev.filter((id) => id !== genreId));
-        }
+        setSelectedGenreIds(prev => event.target.checked ? [...prev, genreId] : prev.filter(id => id !== genreId));
     };
 
-     // Manipulador para seleção de livro favorito
-     const handleBookSelect = (book: BookSearchResult) => {
-         // Limita a seleção a 2 livros
-        if (selectedBooks.length < 2 && !selectedBooks.find(b => b.id === book.id)) {
-             setSelectedBooks(prev => [...prev, book]);
-        }
-         // Limpa a busca após selecionar (opcional)
-         setBookSearchTerm("");
-         setBookSearchResults([]);
-    };
-
-     // Manipulador para remover livro selecionado
-     const handleBookRemove = (bookId: number) => {
-         setSelectedBooks(prev => prev.filter(b => b.id !== bookId));
-     };
-
-
-    // Manipulador do submit do formulário
+    // Handler do submit (igual)
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
-        setApiErrors([]); // Limpa erros anteriores
-
-        // Validação básica do lado do cliente
-        if (selectedBooks.length !== 2) {
-             setApiErrors([{ msg: "Por favor, selecione exatamente 2 livros favoritos." }]);
-             return;
-        }
-         if (selectedGenreIds.length === 0) {
-             setApiErrors([{ msg: "Por favor, selecione pelo menos 1 gênero favorito." }]);
-             return;
-         }
-
+        setApiErrors([]);
+        if (selectedBooks.length !== 2) { setApiErrors([{ msg: "Selecione exatamente 2 livros favoritos." }]); return; }
+        if (selectedGenreIds.length === 0) { setApiErrors([{ msg: "Selecione pelo menos 1 gênero favorito." }]); return; }
         setLoading(true);
-
-        const userData = {
-            username,
-            email,
-            password,
-            favoriteBookIds: selectedBooks.map(b => b.id), // Pega apenas os IDs
-            favoriteGenreIds: selectedGenreIds,
-        };
-
-        const result = await register(userData); // Chama a função do context
-
+        const userData = { username, email, password, favoriteBookIds: selectedBooks.map(b => b.id), favoriteGenreIds: selectedGenreIds };
+        const result = await register(userData);
         setLoading(false);
-        if (result.success) {
-            alert("Cadastro realizado com sucesso! Faça o login.");
-            navigate("/login");
-        } else {
-            setApiErrors(result.errors || [{ msg: "Erro desconhecido no registro." }]);
-        }
+        if (result.success) { alert("Cadastro realizado com sucesso! Faça o login."); navigate("/login"); }
+        else { setApiErrors(result.errors || [{ msg: "Erro desconhecido." }]); }
     };
 
+    // Filtra gêneros baseado na busca do usuário
+    const filteredGenres = genres.filter(genre =>
+        genre.name.toLowerCase().includes(genreSearchTerm.toLowerCase())
+    );
+
     return (
-        <div>
-            <h2>Cadastro</h2>
-            <form onSubmit={handleRegister}>
-                {/* Campos Username, Email, Password */}
-                <input type="text" placeholder="Nome de Usuário" value={username} onChange={(e) => setUsername(e.target.value)} required disabled={loading}/>
-                <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading}/>
-                <input type="password" placeholder="Senha (mín. 6 caracteres)" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={loading}/>
+        // Container principal da página
+        <div className="register-page">
+            {/* Container do formulário */}
+            <div className="register-container">
+                <h2>Cadastro</h2>
+                <form onSubmit={handleRegister} className="register-form">
 
-                 <hr />
-
-                 {/* Seleção de Livros Favoritos */}
-                 <div>
-                    <label>Seus 2 Livros Favoritos:</label>
-                    <div>
-                        {selectedBooks.map(book => (
-                            <div key={book.id} style={{ display: 'flex', alignItems: 'center', marginBottom: '5px' }}>
-                                <span>{book.title}</span>
-                                <button type="button" onClick={() => handleBookRemove(book.id)} style={{ marginLeft: '10px' }}>X</button>
-                            </div>
-                        ))}
+                    {/* Grupo de Campos Básicos */}
+                    <div className="form-group">
+                        <label htmlFor="username">Nome de Usuário</label>
+                        <input type="text" id="username" placeholder="Seu nome de usuário" value={username} onChange={(e) => setUsername(e.target.value)} required disabled={loading} />
                     </div>
-                    {selectedBooks.length < 2 && (
-                        <div>
-                            <input
+                    <div className="form-group">
+                        <label htmlFor="email">Email</label>
+                        <input type="email" id="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading} />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="password">Senha</label>
+                        <input type="password" id="password" placeholder="Mínimo 6 caracteres" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={loading} minLength={6}/>
+                    </div>
+
+                    <hr className="form-divider"/>
+
+                    {/* Seção Livros Favoritos */}
+                    <fieldset className="form-section">
+                        <legend>Seus 2 Livros Favoritos</legend>
+                        {/* Lista de livros selecionados */}
+                        <div className="selected-items-list">
+                            {selectedBooks.map(book => (
+                                <div key={book.id} className="selected-item">
+                                    <span>{book.title}</span>
+                                    <button type="button" onClick={() => handleBookRemove(book.id)} className="remove-btn" title="Remover">×</button>
+                                </div>
+                            ))}
+                            {selectedBooks.length < 2 && <span className="placeholder-text">Selecione mais {2 - selectedBooks.length} livro(s)</span>}
+                        </div>
+                        {/* Input de busca e resultados */}
+                        {selectedBooks.length < 2 && (
+                            <div className="search-input-group">
+                                <label htmlFor="bookSearch">Buscar Livro</label>
+                                <input
+                                    type="text"
+                                    id="bookSearch"
+                                    placeholder="Digite o título..."
+                                    value={bookSearchTerm}
+                                    onChange={(e) => setBookSearchTerm(e.target.value)}
+                                    disabled={loading}
+                                    className="search-input"
+                                />
+                                {isSearchingBooks && <p className="loading-text">Buscando...</p>}
+                                {bookSearchResults.length > 0 && (
+                                    <ul className="search-results-list">
+                                        {bookSearchResults.map(book => (
+                                            <li key={book.id} onClick={() => handleBookSelect(book)} >
+                                                {book.title} {book.authors ? <span className="author-hint">({book.authors})</span> : ''}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        )}
+                    </fieldset>
+
+                    <hr className="form-divider"/>
+
+                     {/* Seção Gêneros Favoritos */}
+                    <fieldset className="form-section">
+                        <legend>Seus Gêneros Favoritos (mín. 1)</legend>
+                        {/* Input de busca de gênero */}
+                        <div className="search-input-group">
+                            <label htmlFor="genreSearch">Buscar Gênero</label>
+                             <input
                                 type="text"
-                                placeholder="Buscar livro pelo título..."
-                                value={bookSearchTerm}
-                                onChange={(e) => setBookSearchTerm(e.target.value)}
+                                id="genreSearch"
+                                placeholder="Digite o nome do gênero..."
+                                value={genreSearchTerm}
+                                onChange={(e) => setGenreSearchTerm(e.target.value)}
                                 disabled={loading}
+                                className="search-input genre-search-input" // Classe adicional se precisar
                             />
-                            {isSearchingBooks && <p>Buscando...</p>}
-                            {bookSearchResults.length > 0 && (
-                                <ul style={{ listStyle: 'none', padding: 0, border: '1px solid #ccc', maxHeight: '150px', overflowY: 'auto' }}>
-                                    {bookSearchResults.map(book => (
-                                        <li key={book.id} onClick={() => handleBookSelect(book)} style={{ cursor: 'pointer', padding: '5px' }}>
-                                            {book.title} {book.authors ? `(${book.authors})` : ''}
-                                        </li>
-                                    ))}
-                                </ul>
-                            )}
+                        </div>
+                        {/* Lista de checkboxes de gêneros (filtrada) */}
+                        <div className="checkbox-list-container">
+                            {genres.length === 0 && !loading && <p>Carregando gêneros...</p> }
+                             {filteredGenres.length > 0 ? filteredGenres.map((genre) => (
+                                 <div key={genre.id} className="checkbox-item">
+                                     <input
+                                         type="checkbox"
+                                         id={`genre-${genre.id}`}
+                                         value={genre.id}
+                                         onChange={handleGenreChange}
+                                         checked={selectedGenreIds.includes(genre.id)}
+                                         disabled={loading}
+                                     />
+                                     <label htmlFor={`genre-${genre.id}`}>{genre.name}</label>
+                                 </div>
+                             )) : (genres.length > 0 && <p>Nenhum gênero encontrado com o termo "{genreSearchTerm}".</p>)}
+                        </div>
+                    </fieldset>
+
+                    <hr className="form-divider"/>
+
+                    {/* Exibição de Erros da API */}
+                    {apiErrors.length > 0 && (
+                        <div className="error-message">
+                            <strong>Erro no cadastro:</strong>
+                            <ul>
+                                {apiErrors.map((err, index) => ( <li key={index}>{err.msg}</li> ))}
+                            </ul>
                         </div>
                     )}
-                 </div>
 
-                 <hr />
-
-                 {/* Seleção de Gêneros Favoritos */}
-                <div>
-                     <label>Seus Gêneros Favoritos (selecione pelo menos 1):</label>
-                     <div style={{ maxHeight: '200px', overflowY: 'auto', border: '1px solid #ccc', padding: '10px' }}>
-                         {genres.length > 0 ? genres.map((genre) => (
-                             <div key={genre.id}>
-                                 <input
-                                     type="checkbox"
-                                     id={`genre-${genre.id}`}
-                                     value={genre.id}
-                                     onChange={handleGenreChange}
-                                     checked={selectedGenreIds.includes(genre.id)}
-                                     disabled={loading}
-                                 />
-                                 <label htmlFor={`genre-${genre.id}`}>{genre.name}</label>
-                             </div>
-                         )) : <p>Carregando gêneros...</p>}
-                     </div>
-                </div>
-
-                <hr />
-
-                 {/* Exibição de Erros da API */}
-                 {apiErrors.length > 0 && (
-                    <div style={{ color: 'red', marginBottom: '10px' }}>
-                        <strong>Erro no cadastro:</strong>
-                        <ul>
-                            {apiErrors.map((err, index) => (
-                                <li key={index}>{err.msg}</li>
-                            ))}
-                        </ul>
-                    </div>
-                 )}
-
-                <button type="submit" disabled={loading}>
-                    {loading ? 'Cadastrando...' : 'Cadastrar'}
-                </button>
-            </form>
-            <p>Já tem uma conta? <Link to="/login">Entrar</Link></p>
+                    {/* Botão de Cadastro */}
+                    <button type="submit" disabled={loading} className="submit-button">
+                        {loading ? 'Cadastrando...' : 'Cadastrar'}
+                    </button>
+                </form>
+                {/* Link para Login */}
+                <p className="login-link">
+                    Já tem uma conta? <Link to="/login">Entrar</Link>
+                </p>
+            </div>
         </div>
     );
 }

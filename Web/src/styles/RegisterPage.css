@@ -1,0 +1,236 @@
+/* src/styles/RegisterPage.css */
+
+.register-page {
+    display: flex; /* Habilita flexbox para centralizar */
+    justify-content: center; /* Centraliza horizontalmente */
+    align-items: flex-start; /* Alinha no topo (caso o form seja menor que a tela) */
+    padding: 40px 20px; /* Espaçamento superior/inferior e lateral */
+    min-height: calc(100vh - 150px); /* Altura mínima (ajuste 150px conforme altura do seu header/footer) */
+    background-color: #f4f4f4; /* Um fundo levemente cinza para a página */
+  }
+  
+  .register-container {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 650px; /* Largura máxima do formulário */
+    box-sizing: border-box;
+  }
+  
+  .register-container h2 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 30px;
+    color: #333;
+    font-size: 1.8em;
+  }
+  
+  .register-form .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .register-form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95em;
+  }
+  
+  .register-form input[type="text"],
+  .register-form input[type="email"],
+  .register-form input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+  }
+  
+  .register-form input:focus {
+      border-color: #007bff;
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  .register-form .form-divider {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 30px 0;
+  }
+  
+  .register-form .form-section {
+    margin-bottom: 25px;
+    border: 1px solid #eee; /* Borda sutil na seção */
+    padding: 15px 20px;
+    border-radius: 5px;
+  }
+  
+  .register-form .form-section legend {
+    font-weight: bold;
+    padding: 0 10px; /* Espaçamento para a legenda */
+    margin-left: 5px;
+    color: #444;
+  }
+  
+  /* Estilos para busca e lista de seleção */
+  .search-input-group {
+      margin-bottom: 15px;
+  }
+  .search-input-group label {
+      font-size: 0.9em;
+      margin-bottom: 5px;
+  }
+  .search-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-size: 0.95em;
+  }
+  .loading-text {
+      font-style: italic;
+      color: #888;
+      font-size: 0.9em;
+      margin-top: 5px;
+  }
+  .search-results-list {
+      list-style: none;
+      padding: 0;
+      margin: 5px 0 0 0;
+      border: 1px solid #ccc;
+      max-height: 150px;
+      overflow-y: auto;
+      border-radius: 4px;
+  }
+  .search-results-list li {
+      padding: 8px 12px;
+      cursor: pointer;
+      border-bottom: 1px solid #eee;
+      font-size: 0.9em;
+  }
+  .search-results-list li:last-child {
+      border-bottom: none;
+  }
+  .search-results-list li:hover {
+      background-color: #f0f0f0;
+  }
+  .author-hint {
+      font-size: 0.85em;
+      color: #777;
+      margin-left: 5px;
+  }
+  
+  /* Estilos para lista de livros selecionados */
+  .selected-items-list {
+      margin-bottom: 10px;
+      min-height: 25px; /* Garante espaço mesmo vazio */
+  }
+  .selected-item {
+      display: inline-flex; /* Usa inline-flex para botão ficar ao lado */
+      align-items: center;
+      background-color: #e9ecef;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin-right: 8px;
+      margin-bottom: 8px; /* Para quebra de linha */
+      font-size: 0.9em;
+  }
+  .remove-btn {
+      background: none;
+      border: none;
+      color: #888;
+      cursor: pointer;
+      margin-left: 8px;
+      font-size: 1.2em;
+      line-height: 1;
+      padding: 0;
+  }
+  .remove-btn:hover {
+      color: #dc3545; /* Vermelho no hover */
+  }
+  .placeholder-text {
+      font-style: italic;
+      color: #aaa;
+      font-size: 0.9em;
+  }
+  
+  /* Estilos para lista de gêneros */
+  .checkbox-list-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    padding: 10px;
+    border-radius: 4px;
+    margin-top: 10px; /* Espaço após busca */
+  }
+  
+  .checkbox-item {
+    display: flex; /* Alinha checkbox e label */
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .checkbox-item input[type="checkbox"] {
+    margin-right: 10px;
+    cursor: pointer;
+  }
+  .checkbox-item label {
+    margin-bottom: 0; /* Remove margem padrão do label */
+    font-weight: normal;
+    color: #333;
+    cursor: pointer;
+    font-size: 0.95em;
+  }
+  
+  /* Mensagem de erro */
+  .error-message {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+  .error-message ul {
+    margin: 5px 0 0 20px;
+    padding: 0;
+  }
+  .error-message li {
+    font-size: 0.9em;
+  }
+  
+  /* Botão de submit */
+  .submit-button {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: #007bff; /* Azul */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  .submit-button:hover:not(:disabled) {
+    background-color: #0056b3; /* Azul mais escuro */
+  }
+  .submit-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Link para Login */
+  .login-link {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 0.95em;
+  }
+  .login-link a {
+    color: #007bff;
+    text-decoration: underline;
+  }
