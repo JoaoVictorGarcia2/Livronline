@@ -1,8 +1,7 @@
-// src/pages/CartPage.tsx
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import './../styles/CartPage.css'; // <<< Crie este arquivo CSS
+import './../styles/CartPage.css'; 
 
 const CartPage = () => {
   const { cart, increaseQuantity, decreaseQuantity, removeFromCart, clearCart, isLoading } = useCart();
@@ -11,13 +10,12 @@ const CartPage = () => {
   const totalValue = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   const handleCheckout = async () => {
-     // Em um app real, aqui você iria para um processo de pagamento
-     // Por enquanto, apenas limpamos o carrinho e mostramos mensagem
+
      if (window.confirm("Confirmar finalização da compra?")) {
         try {
-             await clearCart(); // Chama a função do context que limpa API e estado local
+             await clearCart();
              alert("Compra realizada com sucesso! Seu carrinho foi limpo.");
-             navigate('/'); // Volta para a home
+             navigate('/'); 
         } catch (error) {
              alert("Erro ao finalizar a compra. Tente novamente.");
         }
@@ -55,7 +53,7 @@ const CartPage = () => {
                   Subtotal: R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
                 </div>
                 <button className="cart-item-remove" onClick={() => removeFromCart(item.id)} disabled={isLoading} title="Remover item">
-                  × {/* Botão de remover */}
+                  × 
                 </button>
               </li>
             ))}

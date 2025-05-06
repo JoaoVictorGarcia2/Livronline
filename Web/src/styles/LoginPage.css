@@ -1,34 +1,33 @@
-/* src/styles/LoginPage.css */
 
 .login-page {
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* Alinha no topo */
-    padding: 60px 20px; /* Mais espaço vertical */
-    min-height: calc(100vh - 150px); /* Altura mínima (ajuste 150px se header/footer for diferente) */
-    background-color: #f4f4f4; /* Fundo cinza claro */
+    align-items: flex-start; 
+    padding: 60px 20px; 
+    min-height: calc(100vh - 150px); 
+    background-color: #f4f4f4; 
   }
   
   .login-container {
     background-color: #fff;
-    padding: 35px 45px; /* Padding interno */
+    padding: 35px 45px; 
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 450px; /* Largura máxima do formulário */
+    max-width: 450px; 
     box-sizing: border-box;
   }
   
   .login-container h2 {
     text-align: center;
     margin-top: 0;
-    margin-bottom: 35px; /* Mais espaço abaixo do título */
+    margin-bottom: 35px;
     color: #333;
     font-size: 1.9em;
   }
   
   .login-form .form-group {
-    margin-bottom: 25px; /* Mais espaço entre campos */
+    margin-bottom: 25px; 
   }
   
   .login-form label {
@@ -55,9 +54,8 @@
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
   }
   
-  /* Mensagem de erro */
   .error-message {
-    color: #dc3545; /* Vermelho */
+    color: #dc3545;
     background-color: #f8d7da;
     border: 1px solid #f5c6cb;
     padding: 10px 15px;
@@ -67,11 +65,10 @@
     text-align: center;
   }
   
-  /* Botão de submit */
   .submit-button {
     width: 100%;
     padding: 12px 20px;
-    background-color: #007bff; /* Azul */
+    background-color: #007bff; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -79,20 +76,19 @@
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s ease;
-    margin-top: 10px; /* Espaço acima do botão */
+    margin-top: 10px;
   }
   .submit-button:hover:not(:disabled) {
-    background-color: #0056b3; /* Azul mais escuro */
+    background-color: #0056b3; 
   }
   .submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
   
-  /* Link para Cadastro */
   .register-link {
     text-align: center;
-    margin-top: 30px; /* Mais espaço acima */
+    margin-top: 30px; 
     font-size: 0.95em;
     color: #555;
   }

@@ -1,14 +1,11 @@
-/* src/styles/Header.css */
-
-/* --- Estilos Gerais do Header --- */
 header.header {
   width: 100%;
-  background-color: #002f6c; /* Azul escuro */
+  background-color: #002f6c; 
   color: white;
-  padding: 10px 0; /* Padding vertical */
+  padding: 10px 0; 
   display: flex;
-  justify-content: center; /* Centraliza o container principal */
-  border-bottom: 10px solid #ffcc00; /* Amarelo */
+  justify-content: center; 
+  border-bottom: 10px solid #ffcc00; 
   box-sizing: border-box;
 }
 
@@ -16,9 +13,9 @@ header.header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 95%; /* Largura geral */
-  max-width: 1400px; /* Largura máxima */
-  gap: 20px; /* Espaço entre logo, busca e nav */
+  width: 95%; 
+  max-width: 1400px; 
+  gap: 20px; 
 }
 
 .logo {
@@ -27,30 +24,29 @@ header.header {
   color: white;
   text-decoration: none;
   white-space: nowrap;
-  flex-shrink: 0; /* Não encolhe */
+  flex-shrink: 0; 
 }
 
-/* --- Estilos da Barra e Dropdown de Busca --- */
 .search-container {
-  position: relative; /* Para posicionar o dropdown */
-  flex-grow: 1; /* Ocupa espaço disponível */
-  max-width: 600px; /* Limita a largura */
+  position: relative;
+  flex-grow: 1; 
+  max-width: 600px; 
   min-width: 200px;
 }
 
 .search-bar {
-  width: 100%; /* Ocupa todo o container */
+  width: 100%; 
   padding: 10px 15px;
   border-radius: 4px;
-  border: 1px solid #ccc; /* Adiciona uma borda sutil */
+  border: 1px solid #ccc;
   font-size: 1rem;
-  box-sizing: border-box; /* Garante que padding não aumente a largura total */
-  color: #333; /* Cor do texto digitado */
+  box-sizing: border-box; 
+  color: #333;
 }
 
 .search-suggestions {
   position: absolute;
-  top: 100%; /* Logo abaixo do input */
+  top: 100%;
   left: 0;
   right: 0;
   background-color: white;
@@ -88,27 +84,24 @@ header.header {
   color: #888;
   font-style: italic;
   cursor: default;
-  padding: 10px 15px; /* Garante padding consistente */
+  padding: 10px 15px; 
 }
 .search-suggestions .suggestion-item.loading:hover,
 .search-suggestions .suggestion-item.none:hover {
    background-color: transparent;
 }
 
-
-/* --- Estilos da Navegação Direita (Login, Favoritos, Carrinho) --- */
 .nav-links {
   display: flex;
   align-items: center;
   gap: 10px;
-  flex-shrink: 0; /* Não encolhe */
+  flex-shrink: 0; 
 }
 
-/* Estilo padrão para Links e Botões dentro da Nav */
 .nav-links > a,
 .nav-links > button,
-.nav-links > span.cart-icon > a { /* Aplica ao Link dentro do span do carrinho */
-  background: #ffcc00; /* Amarelo */
+.nav-links > span.cart-icon > a { 
+  background: #ffcc00; 
   color: #333;
   border: none;
   padding: 8px 12px;
@@ -118,63 +111,56 @@ header.header {
   display: inline-block;
   white-space: nowrap;
   font-size: 0.9rem;
-  line-height: 1.2; /* Ajuste para alinhamento vertical */
+  line-height: 1.2; 
   transition: background-color 0.2s ease;
 }
 .nav-links > button {
-    font-family: inherit; /* Usa a mesma fonte */
+    font-family: inherit; 
 }
 .nav-links > a:hover,
 .nav-links > button:hover,
 .nav-links > span.cart-icon > a:hover {
-    background-color: #e6b800; /* Amarelo mais escuro no hover */
+    background-color: #e6b800; 
 }
 
-/* Estilo específico para o texto "Bem-vindo" */
  .nav-links span.welcome-user {
-    background: none; /* Sem fundo amarelo */
+    background: none; 
     color: white;
-    padding: 8px 5px 8px 0; /* Ajusta padding */
+    padding: 8px 5px 8px 0; 
     cursor: default;
     font-size: 0.9rem;
     white-space: nowrap;
  }
  .nav-links span.welcome-user:hover {
-     background: none; /* Garante que não tenha hover */
+     background: none; 
  }
 
-/* --- Estilos do Ícone e Dropdown do Carrinho --- */
 .cart-icon {
-  position: relative; /* Para o posicionamento absoluto do dropdown */
+  position: relative; 
   cursor: pointer;
-  /* Remove o background amarelo do span externo */
   background: none;
   padding: 0;
 }
 .cart-icon:hover {
-    background: none; /* Garante que o span externo não tenha hover */
+    background: none;
 }
 
 
 .cart-dropdown {
   position: absolute;
-  top: calc(100% + 5px); /* Abaixo do botão com pequeno espaço */
+  top: calc(100% + 5px); 
   right: 0;
   background: rgb(240, 240, 240);
   border: 1px solid #ccc;
   border-radius: 5px;
-  /* --- Largura Flexível --- */
   min-width: 300px;
   max-width: 400px;
-  width: max-content; /* Tenta se ajustar ao conteúdo */
-  /* --- Fim Largura --- */
-  padding: 10px 15px; /* Mais padding lateral */
+  width: max-content; 
+  padding: 10px 15px; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   z-index: 100;
-  /* --- Scroll Vertical --- */
   max-height: 400px;
   overflow-y: auto;
-  /* --- Fim Scroll --- */
 }
 
 .cart-item {
@@ -184,7 +170,7 @@ header.header {
   margin-bottom: 8px;
   padding-bottom: 8px;
   border-bottom: 1px solid #eee;
-  gap: 10px; /* Espaço entre elementos */
+  gap: 10px; 
 }
 .cart-item:last-of-type {
   margin-bottom: 0;
@@ -192,24 +178,22 @@ header.header {
   border-bottom: none;
 }
 
-/* Título do item no carrinho (com truncamento) */
 .cart-item span[title] {
   flex-grow: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  min-width: 0; /* Ajuda no truncamento em flex */
+  min-width: 0; 
   margin-right: 5px;
   color: #333;
   font-size: 0.9em;
 }
 
-/* Controles de quantidade */
 .cart-item-controls {
   display: flex;
   align-items: center;
   gap: 5px;
-  flex-shrink: 0; /* Não encolhe */
+  flex-shrink: 0; 
 }
 .cart-item-controls button {
   padding: 1px 6px;
@@ -229,7 +213,6 @@ header.header {
     color: #333;
 }
 
-/* Linha separadora e total */
 .cart-dropdown hr {
     border: 0;
     border-top: 1px solid #ddd;
@@ -244,7 +227,6 @@ header.header {
   font-size: 1.1em;
 }
 
-/* Mensagem de carrinho vazio */
 .cart-dropdown p {
     text-align: center;
     color: #777;
@@ -252,7 +234,6 @@ header.header {
 }
 
 
-/* --- Estilos específicos HeaderLogin (mantidos, revise se necessário) --- */
 .header-container-login {
   display: flex;
   justify-content: center;
@@ -262,13 +243,12 @@ header.header {
 .logoLogin {
   font-size: 45px;
   font-weight: bold;
-  /* Adicione cor, text-decoration etc. se necessário */
    color: white;
    text-decoration: none;
 }
 
 .logo-image {
-  height: 100px; /* Ajuste a altura conforme necessário */
-  width: auto; /* Mantém a proporção */
-  vertical-align: middle; /* Alinha melhor com outros itens */
+  height: 100px;
+  width: auto;
+  vertical-align: middle; 
 }

@@ -1,14 +1,13 @@
-/* src/styles/FavoriteButton.css */
 .favorite-button {
     background: none;
     border: none;
     padding: 5px;
     cursor: pointer;
-    font-size: 1.5rem; /* Tamanho padrão do coração */
+    font-size: 1.5rem; 
     line-height: 1;
-    color: #ccc; /* Cor padrão (cinza) */
+    color: #ccc; 
     transition: color 0.2s ease, transform 0.2s ease;
-    display: inline-flex; /* Para alinhar ícone e texto */
+    display: inline-flex; 
     align-items: center;
     gap: 4px;
   }
@@ -18,7 +17,7 @@
   }
   
   .favorite-button.active {
-    color: red; /* Cor quando ativo (favoritado) */
+    color: red;
   }
   
   .favorite-button:disabled {
@@ -26,16 +25,14 @@
     opacity: 0.5;
   }
   
-  /* Tamanho pequeno (opcional) */
   .favorite-button.small {
     font-size: 1.1rem;
     padding: 2px;
   }
   .favorite-button.small .fav-text {
-      display: none; /* Esconde texto no modo pequeno */
+      display: none; 
   }
   
-  /* Estilo para o texto (opcional) */
   .favorite-button .fav-text {
       font-size: 0.8rem;
       color: #555;

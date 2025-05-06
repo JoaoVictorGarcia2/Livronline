@@ -1,12 +1,10 @@
-/* src/styles/RegisterPage.css */
-
 .register-page {
-    display: flex; /* Habilita flexbox para centralizar */
-    justify-content: center; /* Centraliza horizontalmente */
-    align-items: flex-start; /* Alinha no topo (caso o form seja menor que a tela) */
-    padding: 40px 20px; /* Espaçamento superior/inferior e lateral */
-    min-height: calc(100vh - 150px); /* Altura mínima (ajuste 150px conforme altura do seu header/footer) */
-    background-color: #f4f4f4; /* Um fundo levemente cinza para a página */
+    display: flex; 
+    justify-content: center;
+    align-items: flex-start; 
+    padding: 40px 20px; 
+    min-height: calc(100vh - 150px); 
+    background-color: #f4f4f4;
   }
   
   .register-container {
@@ -15,7 +13,7 @@
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 650px; /* Largura máxima do formulário */
+    max-width: 650px; 
     box-sizing: border-box;
   }
   
@@ -64,19 +62,18 @@
   
   .register-form .form-section {
     margin-bottom: 25px;
-    border: 1px solid #eee; /* Borda sutil na seção */
+    border: 1px solid #eee; 
     padding: 15px 20px;
     border-radius: 5px;
   }
   
   .register-form .form-section legend {
     font-weight: bold;
-    padding: 0 10px; /* Espaçamento para a legenda */
+    padding: 0 10px; 
     margin-left: 5px;
     color: #444;
   }
   
-  /* Estilos para busca e lista de seleção */
   .search-input-group {
       margin-bottom: 15px;
   }
@@ -125,19 +122,18 @@
       margin-left: 5px;
   }
   
-  /* Estilos para lista de livros selecionados */
   .selected-items-list {
       margin-bottom: 10px;
-      min-height: 25px; /* Garante espaço mesmo vazio */
+      min-height: 25px; 
   }
   .selected-item {
-      display: inline-flex; /* Usa inline-flex para botão ficar ao lado */
+      display: inline-flex; 
       align-items: center;
       background-color: #e9ecef;
       padding: 5px 10px;
       border-radius: 15px;
       margin-right: 8px;
-      margin-bottom: 8px; /* Para quebra de linha */
+      margin-bottom: 8px; 
       font-size: 0.9em;
   }
   .remove-btn {
@@ -151,7 +147,7 @@
       padding: 0;
   }
   .remove-btn:hover {
-      color: #dc3545; /* Vermelho no hover */
+      color: #dc3545; 
   }
   .placeholder-text {
       font-style: italic;
@@ -159,18 +155,17 @@
       font-size: 0.9em;
   }
   
-  /* Estilos para lista de gêneros */
   .checkbox-list-container {
     max-height: 200px;
     overflow-y: auto;
     border: 1px solid #eee;
     padding: 10px;
     border-radius: 4px;
-    margin-top: 10px; /* Espaço após busca */
+    margin-top: 10px;
   }
   
   .checkbox-item {
-    display: flex; /* Alinha checkbox e label */
+    display: flex; 
     align-items: center;
     margin-bottom: 8px;
   }
@@ -179,14 +174,13 @@
     cursor: pointer;
   }
   .checkbox-item label {
-    margin-bottom: 0; /* Remove margem padrão do label */
+    margin-bottom: 0; 
     font-weight: normal;
     color: #333;
     cursor: pointer;
     font-size: 0.95em;
   }
   
-  /* Mensagem de erro */
   .error-message {
     background-color: #f8d7da;
     color: #721c24;
@@ -203,11 +197,10 @@
     font-size: 0.9em;
   }
   
-  /* Botão de submit */
   .submit-button {
     width: 100%;
     padding: 12px 20px;
-    background-color: #007bff; /* Azul */
+    background-color: #007bff; 
     color: white;
     border: none;
     border-radius: 4px;
@@ -217,14 +210,13 @@
     transition: background-color 0.2s ease;
   }
   .submit-button:hover:not(:disabled) {
-    background-color: #0056b3; /* Azul mais escuro */
+    background-color: #0056b3; 
   }
   .submit-button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
   
-  /* Link para Login */
   .login-link {
     text-align: center;
     margin-top: 25px;

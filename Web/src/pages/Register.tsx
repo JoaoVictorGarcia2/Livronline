@@ -1,48 +1,39 @@
-// src/pages/Register.tsx
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import api from "../services/api";
-import './../styles/RegisterPage.css'; // <<< Importa o novo CSS
+import './../styles/RegisterPage.css';
 
-// Interfaces (iguais)
 interface Genre { id: number; name: string; }
 interface BookSearchResult { id: number; title: string; authors: string | null; }
 
 function Register() {
-    // Estados do formulário
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [apiErrors, setApiErrors] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-
-    // Estados para livros favoritos
     const [bookSearchTerm, setBookSearchTerm] = useState("");
     const [bookSearchResults, setBookSearchResults] = useState<BookSearchResult[]>([]);
     const [selectedBooks, setSelectedBooks] = useState<BookSearchResult[]>([]);
     const [isSearchingBooks, setIsSearchingBooks] = useState<boolean>(false);
-
-    // Estados para gêneros favoritos
     const [genres, setGenres] = useState<Genre[]>([]);
-    const [genreSearchTerm, setGenreSearchTerm] = useState(""); // <<< NOVO estado para busca de gênero
+    const [genreSearchTerm, setGenreSearchTerm] = useState(""); 
     const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
 
     const { register } = useAuth();
     const navigate = useNavigate();
 
-    // Busca gêneros na montagem (igual)
     useEffect(() => {
         const fetchGenres = async () => {
             try {
-                const response = await api.get<Genre[]>('/genres'); // Espera array de Genre
+                const response = await api.get<Genre[]>('/genres'); 
                 setGenres(response.data || []);
             } catch (error) { console.error("Erro ao buscar gêneros:", error); }
         };
         fetchGenres();
     }, []);
 
-    // Busca livros (igual)
     useEffect(() => {
         if (bookSearchTerm.trim().length < 2) { setBookSearchResults([]); setIsSearchingBooks(false); return; }
         setIsSearchingBooks(true);
@@ -56,20 +47,17 @@ function Register() {
         return () => clearTimeout(delayDebounceFn);
     }, [bookSearchTerm]);
 
-    // Handlers de seleção/remoção de livro (iguais)
     const handleBookSelect = (book: BookSearchResult) => {
         if (selectedBooks.length < 2 && !selectedBooks.find(b => b.id === book.id)) { setSelectedBooks(prev => [...prev, book]); }
         setBookSearchTerm(""); setBookSearchResults([]);
     };
     const handleBookRemove = (bookId: number) => { setSelectedBooks(prev => prev.filter(b => b.id !== bookId)); };
 
-    // Handler de seleção de gênero (igual)
     const handleGenreChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const genreId = parseInt(event.target.value, 10);
         setSelectedGenreIds(prev => event.target.checked ? [...prev, genreId] : prev.filter(id => id !== genreId));
     };
 
-    // Handler do submit (igual)
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setApiErrors([]);
@@ -83,20 +71,16 @@ function Register() {
         else { setApiErrors(result.errors || [{ msg: "Erro desconhecido." }]); }
     };
 
-    // Filtra gêneros baseado na busca do usuário
     const filteredGenres = genres.filter(genre =>
         genre.name.toLowerCase().includes(genreSearchTerm.toLowerCase())
     );
 
     return (
-        // Container principal da página
         <div className="register-page">
-            {/* Container do formulário */}
             <div className="register-container">
                 <h2>Cadastro</h2>
                 <form onSubmit={handleRegister} className="register-form">
 
-                    {/* Grupo de Campos Básicos */}
                     <div className="form-group">
                         <label htmlFor="username">Nome de Usuário</label>
                         <input type="text" id="username" placeholder="Seu nome de usuário" value={username} onChange={(e) => setUsername(e.target.value)} required disabled={loading} />
@@ -112,10 +96,8 @@ function Register() {
 
                     <hr className="form-divider"/>
 
-                    {/* Seção Livros Favoritos */}
                     <fieldset className="form-section">
                         <legend>Seus 2 Livros Favoritos</legend>
-                        {/* Lista de livros selecionados */}
                         <div className="selected-items-list">
                             {selectedBooks.map(book => (
                                 <div key={book.id} className="selected-item">
@@ -125,7 +107,6 @@ function Register() {
                             ))}
                             {selectedBooks.length < 2 && <span className="placeholder-text">Selecione mais {2 - selectedBooks.length} livro(s)</span>}
                         </div>
-                        {/* Input de busca e resultados */}
                         {selectedBooks.length < 2 && (
                             <div className="search-input-group">
                                 <label htmlFor="bookSearch">Buscar Livro</label>
@@ -154,10 +135,8 @@ function Register() {
 
                     <hr className="form-divider"/>
 
-                     {/* Seção Gêneros Favoritos */}
                     <fieldset className="form-section">
                         <legend>Seus Gêneros Favoritos (mín. 1)</legend>
-                        {/* Input de busca de gênero */}
                         <div className="search-input-group">
                             <label htmlFor="genreSearch">Buscar Gênero</label>
                              <input
@@ -167,10 +146,9 @@ function Register() {
                                 value={genreSearchTerm}
                                 onChange={(e) => setGenreSearchTerm(e.target.value)}
                                 disabled={loading}
-                                className="search-input genre-search-input" // Classe adicional se precisar
+                                className="search-input genre-search-input" 
                             />
                         </div>
-                        {/* Lista de checkboxes de gêneros (filtrada) */}
                         <div className="checkbox-list-container">
                             {genres.length === 0 && !loading && <p>Carregando gêneros...</p> }
                              {filteredGenres.length > 0 ? filteredGenres.map((genre) => (
@@ -191,7 +169,6 @@ function Register() {
 
                     <hr className="form-divider"/>
 
-                    {/* Exibição de Erros da API */}
                     {apiErrors.length > 0 && (
                         <div className="error-message">
                             <strong>Erro no cadastro:</strong>
@@ -201,12 +178,10 @@ function Register() {
                         </div>
                     )}
 
-                    {/* Botão de Cadastro */}
                     <button type="submit" disabled={loading} className="submit-button">
                         {loading ? 'Cadastrando...' : 'Cadastrar'}
                     </button>
                 </form>
-                {/* Link para Login */}
                 <p className="login-link">
                     Já tem uma conta? <Link to="/login">Entrar</Link>
                 </p>

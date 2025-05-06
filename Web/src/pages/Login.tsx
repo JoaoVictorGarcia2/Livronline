@@ -1,8 +1,7 @@
-// src/pages/Login.tsx
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import './../styles/LoginPage.css'; // <<< Importa o novo CSS
+import './../styles/LoginPage.css'; 
 
 function Login() {
   const [identifier, setIdentifier] = useState("");
@@ -21,18 +20,15 @@ function Login() {
     if (success) {
       navigate("/");
     } else {
-      setError("Nome de usuário, email ou senha inválidos!"); // Mensagem mais clara
+      setError("Nome de usuário, email ou senha inválidos!"); 
     }
   };
 
   return (
-    // Container da página
     <div className="login-page">
-        {/* Container do formulário */}
         <div className="login-container">
             <h2>Login</h2>
             <form onSubmit={handleLogin} className="login-form">
-                {/* Grupo para Identificador */}
                 <div className="form-group">
                     <label htmlFor="identifier">Nome de Usuário ou Email</label>
                     <input
@@ -45,7 +41,6 @@ function Login() {
                       disabled={loading}
                     />
                 </div>
-                {/* Grupo para Senha */}
                 <div className="form-group">
                     <label htmlFor="password">Senha</label>
                     <input
@@ -59,15 +54,12 @@ function Login() {
                     />
                 </div>
 
-                {/* Exibição de Erro */}
                 {error && <p className="error-message">{error}</p>}
 
-                {/* Botão de Submit */}
                 <button type="submit" disabled={loading} className="submit-button">
                   {loading ? 'Entrando...' : 'Entrar'}
                 </button>
             </form>
-            {/* Link para Cadastro */}
             <p className="register-link">
                 Não tem uma conta? <Link to="/register">Cadastre-se</Link>
             </p>

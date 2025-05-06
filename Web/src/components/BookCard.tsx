@@ -1,16 +1,14 @@
-// src/components/BookCard.tsx
 import { Link } from 'react-router-dom';
 import { useCart } from "../context/CartContext";
-import FavoriteButton from './FavoriteButton'; // Importa o botão
+import FavoriteButton from './FavoriteButton';
 
-// Interface ATUALIZADA para as props esperadas pelo BookCard
 interface BookCardProps {
   book: {
     id: number;
     title: string;
-    price: string;        // Preço formatado
+    price: string;        
     image: string | null;
-    is_favorite?: boolean; // <<< Adicionado aqui para receber o status
+    is_favorite?: boolean; 
   };
 }
 
@@ -22,7 +20,7 @@ const BookCard = ({ book }: BookCardProps) => {
       id: book.id,
       title: book.title,
       image: book.image,
-      price: null // Backend busca o preço
+      price: null 
     });
   };
 
@@ -35,9 +33,7 @@ const BookCard = ({ book }: BookCardProps) => {
              <div className="book-image-placeholder"><span>Sem Imagem</span></div>
         )}
       </Link>
-      {/* Posiciona o Botão de Favorito */}
       <div className="book-card-actions">
-           {/* Passa o book.is_favorite para initialIsFavorite */}
           <FavoriteButton bookId={book.id} initialIsFavorite={book.is_favorite} size="small"/>
       </div>
       <Link to={`/books/${book.id}`} className="book-title-link">

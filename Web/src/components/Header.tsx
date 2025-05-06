@@ -1,15 +1,13 @@
-// src/components/Header.tsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { Link, useNavigate } from "react-router-dom"; // Import Link
+import { Link, useNavigate } from "react-router-dom"; 
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { useSearch } from "../context/SearchContext"; // Contexto para searchTerm global
+import { useSearch } from "../context/SearchContext";
 import api from "../services/api";
-import "./../styles/Header.css"; // Garanta que este CSS seja importado
+import "./../styles/Header.css";
 import logoImage from '../../public/Logo.png';
 
 
-// Interface para os dados das sugestões
 interface BookSuggestion {
   id: number;
   title: string;
@@ -17,17 +15,15 @@ interface BookSuggestion {
 
 const Header = () => {
   const { cart, increaseQuantity, decreaseQuantity } = useCart();
-  const { user, logout, isLoading: isAuthLoading } = useAuth(); // Pega isAuthLoading de useAuth
-  const { searchTerm, setSearchTerm } = useSearch(); // Usa o searchTerm global
+  const { user, logout, isLoading: isAuthLoading } = useAuth(); 
+  const { searchTerm, setSearchTerm } = useSearch(); 
   const navigate = useNavigate();
 
-  // Estados locais APENAS para o dropdown e loading da busca
   const [suggestions, setSuggestions] = useState<BookSuggestion[]>([]);
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const searchContainerRef = useRef<HTMLDivElement>(null); // Ref para detectar clique fora
+  const searchContainerRef = useRef<HTMLDivElement>(null); 
 
-  // --- Função Debounced para chamar a API ---
   const debounceApiCall = useCallback(
     async (term: string) => {
       if (term.trim().length < 2) {
@@ -35,7 +31,6 @@ const Header = () => {
         setIsDropdownVisible(false);
         return;
       }
-      // console.log(`DEBUG: Buscando sugestões para "${term}"`);
       setIsSearching(true);
       setIsDropdownVisible(true);
       try {
@@ -43,7 +38,6 @@ const Header = () => {
           `/books?search=${encodeURIComponent(term)}&limit=15`
         );
         setSuggestions(response.data.data || []);
-        // console.log("DEBUG: Sugestões recebidas:", response.data.data);
       } catch (error) {
         console.error("Erro ao buscar sugestões:", error);
         setSuggestions([]);
@@ -54,7 +48,6 @@ const Header = () => {
     []
   );
 
-  // --- useEffect para disparar a busca quando searchTerm (do context) muda ---
   useEffect(() => {
     if (searchTerm && searchTerm.trim().length >= 2) {
       const handler = setTimeout(() => {
@@ -67,7 +60,6 @@ const Header = () => {
     }
   }, [searchTerm, debounceApiCall]);
 
-  // --- useEffect para fechar dropdown com clique fora ---
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
@@ -78,34 +70,28 @@ const Header = () => {
     return () => { document.removeEventListener("mousedown", handleClickOutside); };
   }, []);
 
-  // --- Handlers ---
   const handleLogout = () => { logout(); };
   const handleSuggestionClick = (bookId: number) => {
-    // console.log(`DEBUG: Sugestão clicada, ID: ${bookId}`);
     setSearchTerm('');
     setSuggestions([]);
     setIsDropdownVisible(false);
     navigate(`/books/${bookId}`);
   };
   const handleFocus = () => { if (suggestions.length > 0 || isSearching) { setIsDropdownVisible(true); } };
-  // --- Fim Handlers ---
 
-  // --- Carrinho ---
-  const [isCartVisible, setCartVisible] = useState(false); // Visibilidade do dropdown de preview
+  const [isCartVisible, setCartVisible] = useState(false); 
   const totalItemsInCart = cart.reduce((acc, item) => acc + item.quantity, 0);
   const totalValue = cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2);
-  // --- Fim Carrinho ---
 
   return (
     <header className="header">
       <div className="header-container">
         <Link to="/" className="logo"><img src={logoImage} alt="A Página Logo" className="logo-image" /></Link>
 
-        {/* Barra de Busca com Dropdown */}
         <div className="search-container" ref={searchContainerRef}>
           <input
             type="text"
-            placeholder="Buscar por título ou gênero..."
+            placeholder="Buscar por título ou autor..."
             className="search-bar"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -132,9 +118,7 @@ const Header = () => {
           )}
         </div>
 
-        {/* Links de Navegação */}
         <nav className="nav-links">
-          {/* Autenticação */}
           {isAuthLoading ? (
             <span>Carregando...</span>
           ) : user ? (
@@ -146,21 +130,17 @@ const Header = () => {
             <Link to="/login">Login</Link>
           )}
 
-          {/* Favoritos - SÓ MOSTRA SE LOGADO */}
-          {user && <Link to="/favorites">Favoritos</Link>} {/* Link para página de Favoritos */}
+          {user && <Link to="/favorites">Favoritos</Link>}
 
-          {/* Carrinho - Link para página + Dropdown de preview */}
-          <span // Span externo para controlar hover do dropdown
-            className="cart-icon" // Mantém a classe para estilos
+          <span 
+            className="cart-icon" 
             style={{ position: 'relative' }}
             onMouseEnter={() => setCartVisible(true)}
             onMouseLeave={() => setCartVisible(false)}
           >
-             {/* Link interno para a página /cart */}
             <Link to="/cart" style={{ textDecoration: 'none', color: 'inherit', padding: '8px 12px', display: 'inline-block' }}>
               Carrinho 🛒 ({totalItemsInCart})
             </Link>
-             {/* Dropdown de preview rápido */}
              {isCartVisible && (
                 <div className="cart-dropdown">
                   {cart.length > 0 ? (

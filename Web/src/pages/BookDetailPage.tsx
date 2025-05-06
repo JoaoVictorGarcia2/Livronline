@@ -1,12 +1,10 @@
-// src/pages/BookDetailPage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import api from '../services/api'; // Nossa instância axios
+import api from '../services/api';
 import { useCart } from '../context/CartContext';
-import FavoriteButton from '../components/FavoriteButton'; // Importa o botão de favorito
-import './../styles/BookDetailPage.css'; // Importa o CSS
+import FavoriteButton from '../components/FavoriteButton'; 
+import './../styles/BookDetailPage.css'; 
 
-// --- Interfaces para os dados esperados da API ---
 interface BookDetails {
     id: number;
     title: string;
@@ -18,10 +16,10 @@ interface BookDetails {
     publishedDate: string | null;
     infoLink: string | null;
     categories: string | null;
-    price: string | null; // Espera string ou null da API
+    price: string | null; 
     average_score: number | null;
     reviews_count: number | null;
-    is_favorite?: boolean; // Status de favorito (vindo da API se logado)
+    is_favorite?: boolean; 
     created_at?: string;
     updated_at?: string;
 }
@@ -32,15 +30,14 @@ interface Review {
     user_id: string | null;
     profileName: string | null;
     review_helpfulness: string | null;
-    review_score: number | null; // << CORRIGIDO (era reviewSem_score)
+    review_score: number | null;
     review_time: number | null;
     review_summary: string | null;
     review_text: string | null;
     created_at: string;
-    original_price_text?: string | null; // Se você adicionou esta coluna
+    original_price_text?: string | null; 
 }
 
-// --- Funções Auxiliares ---
 const formatPrice = (priceInput: string | number | null): string => {
     if (priceInput === null || priceInput === undefined) return "Indisponível";
     let numericPrice: number;
@@ -55,7 +52,6 @@ const formatPrice = (priceInput: string | number | null): string => {
 const formatReviewTime = (timestamp: number | null): string => {
     if (!timestamp) return '-';
     try {
-        // Multiplica por 1000 se o timestamp estiver em segundos
         return new Date(timestamp * 1000).toLocaleDateString('pt-BR', {
             year: 'numeric', month: 'short', day: 'numeric'
         });
@@ -84,7 +80,6 @@ const cleanList = (listString: string | null): string[] => {
 };
 
 
-// --- Componente BookDetailPage ---
 const BookDetailPage = () => {
     const { bookId } = useParams<{ bookId: string }>();
     const { addToCart, isLoading: isCartLoading } = useCart();
@@ -95,7 +90,6 @@ const BookDetailPage = () => {
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [modalImageUrl, setModalImageUrl] = useState<string | null>(null);
 
-    // Busca dados do livro e reviews
     useEffect(() => {
         const fetchBookData = async () => {
              if (!bookId || isNaN(parseInt(bookId))) {
@@ -105,16 +99,15 @@ const BookDetailPage = () => {
              }
              setLoading(true); setError(null); setBookDetails(null); setReviews([]);
              try {
-                 // Usa a instância 'api' que já inclui o token se disponível
                  const [detailsResponse, reviewsResponse] = await Promise.all([
-                     api.get<BookDetails>(`/books/${bookId}`), // Rota já modificada para incluir is_favorite se logado
-                     api.get<{ data: Review[], pagination: any }>(`/books/${bookId}/reviews?limit=20`) // Limita reviews iniciais
+                     api.get<BookDetails>(`/books/${bookId}`), 
+                     api.get<{ data: Review[], pagination: any }>(`/books/${bookId}/reviews?limit=20`) 
                  ]);
 
                  if (!detailsResponse.data || !detailsResponse.data.id) {
                      throw new Error("Livro não encontrado.");
                  }
-                 setBookDetails(detailsResponse.data); // 'is_favorite' estará aqui se o usuário estiver logado
+                 setBookDetails(detailsResponse.data); 
                  setReviews(reviewsResponse.data.data || []);
 
              } catch (err: any) {
@@ -126,13 +119,11 @@ const BookDetailPage = () => {
              }
         };
         fetchBookData();
-    }, [bookId]); // Re-executa se o bookId mudar
+    }, [bookId]); 
 
-    // Funções para o modal da imagem
     const openImageModal = (imageUrl: string | null) => { if (imageUrl) { setModalImageUrl(imageUrl); setIsModalOpen(true); } };
     const closeImageModal = () => { setIsModalOpen(false); setModalImageUrl(null); };
 
-    // Função para adicionar ao carrinho
     const handleAddToCart = () => {
         if (!bookDetails) return;
         let numericPrice: number | null = null;
@@ -140,12 +131,11 @@ const BookDetailPage = () => {
             const cleaned = bookDetails.price.replace(/[^0-9.]+/g, '');
             const parsed = parseFloat(cleaned);
             if (!isNaN(parsed)) numericPrice = parsed;
-        } else { numericPrice = bookDetails.price as number | null; } // Caso raro onde já vem como número
+        } else { numericPrice = bookDetails.price as number | null; } 
 
         addToCart({ id: bookDetails.id, title: bookDetails.title, image: bookDetails.image, price: numericPrice });
     };
 
-    // --- Renderização ---
     if (loading) { return <div className="book-detail-status"><p>Carregando detalhes do livro...</p></div>; }
     if (error) { return <div className="book-detail-status"><p style={{ color: 'red' }}>{error}</p><Link to="/">Voltar para Home</Link></div>; }
     if (!bookDetails) { return <div className="book-detail-status"><p>Nenhum detalhe de livro para exibir.</p><Link to="/">Voltar para Home</Link></div>; }
@@ -154,10 +144,9 @@ const BookDetailPage = () => {
     const categoriesList = cleanList(bookDetails.categories);
 
     return (
-        <> {/* Fragmento para o modal */}
+        <> 
             <div className="book-detail-page">
                 <div className="book-main-info">
-                    {/* Imagem Clicável */}
                     <div
                         className="book-image-container"
                         onClick={() => openImageModal(bookDetails.image)}
@@ -168,11 +157,9 @@ const BookDetailPage = () => {
                         {bookDetails.image ? (<img src={bookDetails.image} alt={`Capa de ${bookDetails.title}`} />) : (<div className="placeholder-image">Sem Imagem</div>)}
                     </div>
 
-                    {/* Informações Resumidas */}
                     <div className="book-summary-info">
                         <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '8px' }}>
                             <h1 style={{ margin: 0 }}>{bookDetails.title}</h1>
-                             {/* Botão Favorito usa o 'is_favorite' vindo da API */}
                              <FavoriteButton bookId={bookDetails.id} initialIsFavorite={bookDetails.is_favorite} size="normal"/>
                          </div>
                         {authorsList.length > 0 && (<p className="authors">por {authorsList.join(', ')}</p>)}
@@ -189,13 +176,11 @@ const BookDetailPage = () => {
                     </div>
                 </div>
 
-                {/* Descrição */}
                 <div className="book-description">
                     <h2>Descrição</h2>
                     <p>{bookDetails.description || 'Nenhuma descrição disponível.'}</p>
                 </div>
 
-                {/* Avaliações */}
                 <div className="book-reviews-section">
                     <h2>Avaliações ({bookDetails.reviews_count ?? reviews.length})</h2>
                     {reviews.length > 0 ? (
@@ -212,7 +197,6 @@ const BookDetailPage = () => {
                                     {review.review_helpfulness && <small>({review.review_helpfulness} acharam útil)</small>}
                                 </li>
                             ))}
-                             {/* TODO: Adicionar botão "Carregar mais reviews" aqui */}
                         </ul>
                     ) : (
                         <p>Ainda não há avaliações para este livro.</p>
@@ -220,7 +204,6 @@ const BookDetailPage = () => {
                 </div>
             </div>
 
-            {/* Modal da Imagem */}
             {isModalOpen && modalImageUrl && (
                 <div className="image-modal-overlay" onClick={closeImageModal}>
                     <div className="image-modal-content" onClick={(e) => e.stopPropagation()}>
